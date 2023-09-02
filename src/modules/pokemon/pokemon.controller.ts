@@ -8,12 +8,18 @@ import {
   UploadedFile,
   ParseFilePipe,
   FileTypeValidator,
+  UseGuards,
+  UseFilters,
 } from '@nestjs/common';
+import { ThrottlerGuard } from '@nestjs/throttler';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { PokemonService } from './pokemon.service';
 import { SinglePokemonParam } from 'interfaces/pokemon.types';
+import { RateLimitFilter } from 'exceptions/throttler.filter';
 
+@UseGuards(ThrottlerGuard)
+@UseFilters(RateLimitFilter)
 @Controller('pokemon')
 export class PokemonController {
   constructor(private readonly pokemonService: PokemonService) {}
