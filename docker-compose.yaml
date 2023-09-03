@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  pokedex-api:
+    build:
+      context: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongodb
+    networks:
+      - pokedex-bridge-network
+
+  mongodb:
+    image: mongo:6.0
+    restart: always
+    ports:
+      - '27017:27017'
+    networks:
+      - pokedex-bridge-network
+
+networks:
+  pokedex-bridge-network:

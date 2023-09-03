@@ -9,7 +9,6 @@ export class RateLimitFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
-    console.log(status);
     const message = 'Rate limit exceeded. Please try again later.';
 
     response.status(status).json({
