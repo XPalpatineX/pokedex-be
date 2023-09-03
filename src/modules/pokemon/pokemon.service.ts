@@ -10,10 +10,13 @@ import {
   EPokemonType,
   PokemonByType,
   PokemonShort,
+  PokemonList,
 } from 'interfaces/pokemon.types';
+import { ReqPagination, EDefaultPagination } from 'interfaces/pagination';
 
 @Injectable()
 export class PokemonService {
+  private readonly MAX_POKEMON = 151;
   private readonly MAX_ENTITIES_PER_FILE = 20;
   private readonly POKEMON_API = process.env.POKEMON_API;
   private readonly logger = new Logger(PokemonService.name);
@@ -25,6 +28,32 @@ export class PokemonService {
         this.httpService.get<Pokemon>(`${this.POKEMON_API}/pokemon/${id}`),
       );
       return pokemonData;
+    } catch (e) {
+      this.logger.error(e.message);
+    }
+  }
+
+  async getAllPokemon(pagination: ReqPagination): Promise<PokemonShort[]> {
+    try {
+      let { limit, page } = pagination;
+
+      if (limit < EDefaultPagination.limit) limit = EDefaultPagination.limit;
+      if (page < EDefaultPagination.page) page = EDefaultPagination.page;
+      let offset = Math.floor((page - 1) * limit);
+
+      if (Math.floor(limit * page) > this.MAX_POKEMON) {
+        limit = this.MAX_POKEMON - offset;
+      }
+      if (offset > this.MAX_POKEMON) {
+        offset = 0;
+        limit = EDefaultPagination.limit;
+      }
+      const { data: pokemonData } = await firstValueFrom(
+        this.httpService.get<PokemonList>(
+          `${this.POKEMON_API}/pokemon?offset=${offset}&limit=${limit}`,
+        ),
+      );
+      return pokemonData.results;
     } catch (e) {
       this.logger.error(e.message);
     }
