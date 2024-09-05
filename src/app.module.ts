@@ -21,14 +21,11 @@ import { AppService } from './app.service';
     // MongooseModule.forRoot('mongodb://mongodb:27017/pokedex'),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => {
-        console.log(path.join(__dirname, '../global-bundle.pem'));
-        return {
-          uri: configService.get<string>('MONGODB_URI'),
-          lazyConnection: true,
-          tlsCAFile: path.join(__dirname, '../global-bundle.pem'),
-        };
-      },
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+        lazyConnection: true,
+        tlsCAFile: path.join(__dirname, '../global-bundle.pem'),
+      }),
       inject: [ConfigService],
     }),
     PokemonModule,
