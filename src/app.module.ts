@@ -7,7 +7,7 @@ import { AuthModule } from 'modules/auth/auth.module';
 import { PokemonModule } from 'modules/pokemon/pokemon.module';
 import { SessionModule } from 'modules/session/session.module';
 import { UsersModule } from 'modules/users/users.module';
-import path from 'path';
+import * as path from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
