@@ -7,7 +7,7 @@ import { AuthModule } from 'modules/auth/auth.module';
 import { PokemonModule } from 'modules/pokemon/pokemon.module';
 import { SessionModule } from 'modules/session/session.module';
 import { UsersModule } from 'modules/users/users.module';
-import * as path from 'node:path';
+import path from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -23,7 +23,6 @@ import { AppService } from './app.service';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('MONGODB_URI'),
-        lazyConnection: true,
         tlsCAFile: path.join(__dirname, '../global-bundle.pem'),
       }),
       inject: [ConfigService],
